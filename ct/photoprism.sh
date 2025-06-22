@@ -47,6 +47,14 @@ start
 build_container
 description
 
+# 🌐 Locale Patch (to fix setlocale warnings)
+msg_info "Patching locale inside container $CTID"
+pct exec $CTID -- bash -c "apt-get update && apt-get install -y locales && \
+  sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
+  locale-gen && \
+  update-locale LANG=en_US.UTF-8"
+msg_ok "Locale patched in container $CTID"
+
 msg_ok "Completed Successfully!\n"
 echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
 echo -e "${INFO}${YW} Access it using the following URL:${CL}"
